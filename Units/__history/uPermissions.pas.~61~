@@ -1,0 +1,74 @@
+unit uPermissions;
+
+interface
+
+uses Androidapi.JNI.GraphicsContentViewText, Androidapi.JNI.JavaTypes, Androidapi.Helpers, System.Permissions,
+     Androidapi.JNI.Os, FMX.Dialogs, Androidapi.JNI.Provider, Androidapi.JNI, FMX.DialogService;
+
+type
+  TPermissionGrantedProc = reference to procedure;
+
+procedure RequestPermissions(const APermissionGrantedProc: TPermissionGrantedProc; const AMessage: string);
+
+var
+  FPermissionRequested: Boolean = False;
+
+implementation
+
+procedure RequestPermissions(const APermissionGrantedProc: TPermissionGrantedProc; const APermissionDeniedMessage: string);
+begin
+  if not PermissionsService.IsPermissionGranted(JStringToString(TJManifest_permission.JavaClass.READ_EXTERNAL_STORAGE)) then
+  begin
+    if FPermissionRequested then
+    begin
+      TDialogService.MessageDialog(APermissionDeniedMessage, TMsgDlgType.mtInformation, [TMsgDlgBtn.mbOK, TMsgDlgBtn.mbYes], TMsgDlgBtn.mbOK, 0,
+        procedure(const AResult: TModalResult)
+        begin
+          if AResult = mrYes then
+          begin
+            PermissionsService.RequestPermissions([JStringToString(TJManifest_permission.JavaClass.READ_EXTERNAL_STORAGE)],
+              procedure(const APermissions: TArray<string>; const AGrantResults: TArray<TPermissionStatus>)
+              begin
+                if (AGrantResults[0] = TPermissionStatus.Granted) then
+                begin
+                  // permissão concedida
+                  APermissionGrantedProc;
+                end
+                else
+                begin
+                  // permissão negada novamente
+                  RequestPermissions(APermissionGrantedProc, APermissionDeniedMessage);
+                end;
+              end);
+          end;
+        end);
+    end
+    else
+    begin
+      PermissionsService.RequestPermissions([JStringToString(TJManifest_permission.JavaClass.READ_EXTERNAL_STORAGE)],
+        procedure(const APermissions: TArray<string>; const AGrantResults: TArray<TPermissionStatus>)
+        begin
+          if (AGrantResults[0] = TPermissionStatus.Granted) then
+          begin
+            // permissão concedida
+            APermissionGrantedProc;
+          end
+          else
+          begin
+            // permissão negada
+            FPermissionRequested := True;
+            RequestPermissions(APermissionGrantedProc, APermissionDeniedMessage);
+          end;
+        end);
+
+      FPermissionRequested := True;
+    end;
+  end
+  else
+  begin
+    // permissão já concedida
+    APermissionGrantedProc;
+  end;
+end;
+
+end.

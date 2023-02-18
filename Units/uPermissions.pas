@@ -1,0 +1,45 @@
+unit uPermissions;
+
+interface
+
+uses Androidapi.JNI.GraphicsContentViewText, Androidapi.JNI.JavaTypes, Androidapi.Helpers, System.Permissions,
+     Androidapi.JNI.Os, FMX.Dialogs, Androidapi.JNI.Provider, Androidapi.JNI;
+
+type
+  TPermissionGrantedProc = reference to procedure;
+
+procedure RequestPermissions(const APermissionGrantedProc: TPermissionGrantedProc; AMessage: string);
+
+var
+  FSolicitarPermissaoNovamente: Boolean = False;
+
+implementation
+
+procedure RequestPermissions(const APermissionGrantedProc: TPermissionGrantedProc; AMessage: string);
+begin
+  if PermissionsService.IsPermissionGranted(JStringToString(TJManifest_permission.JavaClass.READ_EXTERNAL_STORAGE)) then
+  begin
+    APermissionGrantedProc;
+    Exit;
+  end;
+
+  PermissionsService.RequestPermissions(
+    [JStringToString(TJManifest_permission.JavaClass.READ_EXTERNAL_STORAGE)],
+    procedure(const APermissions: TArray<string>; const AGrantResults: TArray<TPermissionStatus>)
+    begin
+      if (AGrantResults[0] = TPermissionStatus.Granted) then
+      begin
+        // permissão concedida
+        APermissionGrantedProc;
+      end
+      else
+      begin
+        // permissão negada
+        ShowMessage(AMessage);
+      end;
+    end
+  );
+end;
+
+
+end.

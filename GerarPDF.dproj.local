@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2023/01/11 17:05:53.000.126,=C:\Audrey\Delphi\Projects\Unit1.pas</Transaction>
+    <Transaction>2023/01/11 17:06:43.000.498,=C:\Audrey\Delphi\Projects\Unit1.pas</Transaction>
+    <Transaction>2023/01/11 17:13:05.000.854,=C:\Audrey\Delphi\Projects\Unit1.pas</Transaction>
+    <Transaction>2023/01/11 17:23:09.000.435,=C:\Audrey\Delphi\Projects\Unit1.pas</Transaction>
+    <Transaction>2023/02/17 16:27:55.000.498,=C:\Audrey\Delphi\Projects\Unit1.pas</Transaction>
+    <Transaction>2023/02/17 16:31:12.000.827,C:\Audrey\Delphi\Projects\Unit1.pas=C:\Audrey\Projetos\GerarPDF\untGerarPDF.pas</Transaction>
+    <Transaction>2023/02/17 16:31:12.000.827,C:\Audrey\Delphi\Projects\Unit1.fmx=C:\Audrey\Projetos\GerarPDF\untGerarPDF.fmx</Transaction>
+    <Transaction>2023/02/17 16:31:20.000.885,C:\Audrey\Delphi\Projects\Project1.dproj=C:\Audrey\Projetos\GerarPDF\GerarPDF.dproj</Transaction>
+    <Transaction>2023/02/17 17:10:16.000.373,=C:\Audrey\Projetos\GerarPDF\Units\uLoading.pas</Transaction>
+    <Transaction>2023/02/18 08:45:25.000.990,C:\Audrey\Projetos\GerarPDF\Units\uLoading.pas=</Transaction>
+    <Transaction>2023/02/18 09:31:50.000.852,=C:\Audrey\Projetos\GerarPDF\Unit1.pas</Transaction>
+    <Transaction>2023/02/18 09:32:47.000.547,C:\Audrey\Projetos\GerarPDF\Unit1.pas=C:\Audrey\Projetos\GerarPDF\Units\uPermissions.pas</Transaction>
+  </Transactions>
+	<ActiveMobileDevice>
+		<NoProfile iOSSimulator="iPhone5" Android="RQ8T10AQREN" Android64="RQ8T10AQREN"/>
+	</ActiveMobileDevice>
+</BorlandProject>

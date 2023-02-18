@@ -1,0 +1,64 @@
+unit uPermissions;
+
+interface
+
+uses Androidapi.JNI.GraphicsContentViewText, Androidapi.JNI.JavaTypes, Androidapi.Helpers, System.Permissions,
+     Androidapi.JNI.Os, FMX.Dialogs, Androidapi.JNI.Provider, Androidapi.JNI;
+
+type
+  TPermissionGrantedProc = reference to procedure;
+
+procedure RequestPermissions(const APermissionGrantedProc: TPermissionGrantedProc; const AMessage: string);
+
+var
+  FSolicitarPermissaoNovamente: Boolean = False;
+
+implementation
+
+procedure RequestPermissions(const APermissionGrantedProc: TPermissionGrantedProc; const AMessage: string);
+begin
+  if not PermissionsService.IsPermissionGranted(JStringToString(TJManifest_permission.JavaClass.READ_EXTERNAL_STORAGE)) then
+  begin
+    PermissionsService.RequestPermissions(
+      [JStringToString(TJManifest_permission.JavaClass.READ_EXTERNAL_STORAGE)],
+      procedure(const APermissions: TArray<string>; const AGrantResults: TArray<TPermissionStatus>)
+      begin
+        if (AGrantResults[0] = TPermissionStatus.Granted) then
+        begin
+          // permissão concedida
+          APermissionGrantedProc;
+        end
+        else
+        begin
+          // permissão negada
+          ShowMessage(AMessage);
+
+          // solicita permissão novamente
+          PermissionsService.RequestPermissions(
+            [JStringToString(TJManifest_permission.JavaClass.READ_EXTERNAL_STORAGE)],
+            procedure(const APermissions: TArray<string>; const AGrantResults: TArray<TPermissionStatus>)
+            begin
+              if (AGrantResults[0] = TPermissionStatus.Granted) then
+              begin
+                // permissão concedida
+                APermissionGrantedProc;
+              end
+              else
+              begin
+                // permissão negada novamente
+                ShowMessage(AMessage);
+              end;
+            end
+          );
+        end;
+      end
+    );
+  end
+  else
+  begin
+    // permissão já concedida
+    APermissionGrantedProc;
+  end;
+end;
+
+end.
